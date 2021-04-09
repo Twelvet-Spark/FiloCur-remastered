@@ -14,7 +14,7 @@ void gmPrintPlayerStats(Player player);
 int Game();
 void menuMain();
 
-char gmLevel[8][8] = {
+vector<vector<char>> gmLevel = {
 {'#', '#', '#', '#', '#', '#', '#', '#'},
 {'#', '.', '+', '.', '#', '.', '.', '#'},
 {'#', '.', '.', '.', '#', '.', '.', '#'}, 
@@ -26,8 +26,8 @@ char gmLevel[8][8] = {
 
 void gmRenderMap()
 {
-    for (int y = 0; y < sizeof(gmLevel) / sizeof(*gmLevel); y++) {
-        for (int x = 0; x < sizeof(gmLevel[y])/sizeof(*gmLevel[y]); x++) {
+    for (int y = 0; y < gmLevel.size(); y++) {
+        for (int x = 0; x < gmLevel[y].size(); x++) {
             cout << gmLevel[y][x] << ' ';
         }
         cout << endl;
@@ -60,8 +60,8 @@ void gmFindPlayer()
 {
     P1Coords.x = -1;
     P1Coords.y = -1;
-    for (int y = 0; y < sizeof(gmLevel) / sizeof(*gmLevel); y++) {
-        for (int x = 0; x < sizeof(gmLevel[y]) / sizeof(*gmLevel[y]); x++) {
+    for (int y = 0; y < gmLevel.size(); y++) {
+        for (int x = 0; x < gmLevel[y].size(); x++) {
             if (gmLevel[y][x] == '+') {
                 P1Coords.x = x;
                 P1Coords.y = y;
@@ -177,16 +177,16 @@ int Game()
 // Меню, содержит в себе всё: центрирование текста, управление курсором и анимацию.
 void menuMain()
 {
-    string menuArr[4]{ "Начать", "Настройки", "Инфо", "Выход" };
-    int *menuArrLenghtOfDecor = new int[sizeof(menuArr) / sizeof(*menuArr)];
+    vector<string> menuArr = { "Начать", "Настройки", "Инфо", "Выход" };
+    vector<int> menuArrLenghtOfDecor(menuArr.size());
     size_t menuArrCounter = 0;
     string menuIndent = "\n|\n";
     string menuDecorSimbols(7, '-');
     short int menuCursorPos = 0;
-    int menuIntInput;
+    int menuIntInput = 0;
     bool menuActionChecker = false;
 
-    for (size_t j = 0; j < sizeof(menuArr) / sizeof(*menuArr); j++) {
+    for (size_t j = 0; j < menuArr.size(); j++) {
         menuArrLenghtOfDecor[j] = menuArr[j].length();
     }
 
@@ -194,7 +194,7 @@ void menuMain()
         system("cls");
         for (size_t z = 0; z < menuDecorSimbols.length(); z++) {
             cout << "|----------Просто меню =S ('w'-Вверх; 's'-Вниз; 'e'-Принять)" << menuIndent;
-            for (int x = 0; x < sizeof(menuArr) / sizeof(*menuArr); x++) {
+            for (int x = 0; x < menuArr.size(); x++) {
                 
                 if (menuCursorPos == x) {
                     menuDecorSimbols[z] = '>';
@@ -268,9 +268,9 @@ void menuMain()
             }
             // Модуль проверки Start.
             if (menuCursorPos < 0) {
-                menuCursorPos = sizeof(menuArr) / sizeof(*menuArr) - 1;
+                menuCursorPos = menuArr.size() - 1;
             }
-            else if (menuCursorPos > sizeof(menuArr) / sizeof(*menuArr) - 1) {
+            else if (menuCursorPos > menuArr.size() - 1) {
                 menuCursorPos = 0;
             }
             // Модуль проверки End.
